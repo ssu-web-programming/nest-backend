@@ -7,6 +7,7 @@ import { PostsController } from './posts.controller';
 import { Post, PostSchema } from './schemas/post.schema';
 import { AuthModule } from '../auth/auth.module';
 import { Types } from 'mongoose';
+import { PostOwnerGuard } from './guards/post-owner.guard'; // ✨ PostOwnerGuard 임포트 추가
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { Types } from 'mongoose';
     forwardRef(() => AuthModule), 
   ],
   controllers: [PostsController],
-  providers: [PostsService],
+  providers: [PostsService, PostOwnerGuard],
   // 만약 PostsService가 다른 모듈에서 사용된다면 exports에도 추가해야 합니다.
   exports: [PostsService], 
 })

@@ -6,6 +6,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard'; // JWT 가드 임포트
+import { PostOwnerGuard } from './guards/post-owner.guard';
 import * as AWS from 'aws-sdk';
 import multerS3 from 'multer-s3';
 import { Types } from 'mongoose';
@@ -99,7 +100,7 @@ export class PostsController {
 
   // 3. 게시물 삭제 API
   @Delete(':id') // URL 파라미터로 게시물 ID를 받음
-  @UseGuards(JwtAuthGuard) // JWT 인증된 사용자만 접근 가능
+  @UseGuards(JwtAuthGuard, PostOwnerGuard) // JWT 인증된 사용자 및 게시물 소유자만 접근 가능
   @ApiBearerAuth('access-token')
   @HttpCode(204) // 삭제 성공 시 204 No Content 반환 (응답 본문 없음)
   @ApiOperation({ summary: '본인이 작성한 특정 게시물 삭제' })

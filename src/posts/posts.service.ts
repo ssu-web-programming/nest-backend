@@ -205,4 +205,13 @@ export class PostsService {
     // 3. (선택적) S3 파일 삭제: 실제 프로젝트에서는 여기에서 S3 파일도 삭제해야 효율적이지만, 
     // 현재는 로직 간결화를 위해 DB 삭제만 구현합니다.
   }
+
+  // 게시글이 없으면 404 NotFoundException을 던집니다.
+  async findOne(id: string): Promise<PostDocument> {
+    const post = await this.postModel.findById(id).exec();
+    if (!post) {
+      throw new NotFoundException('해당 게시글을 찾을 수 없습니다.');
+    }
+    return post;
+  }
 }
